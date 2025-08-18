@@ -2,6 +2,8 @@ require 'rails_helper'
 
 # Api requests
 RSpec.describe 'Books', type: :request do
+  include_context 'Skip Auth'
+
   let(:book_1) { create(:book) }
   let(:book_2) { create(:book_2) }
   let(:book_3) { create(:book_3) }
@@ -38,7 +40,7 @@ RSpec.describe 'Books', type: :request do
       end
 
       it 'returns "book_1" book as json' do
-        expect(json_body["data"]["title"]).to eq "My first book"
+        expect(json_body["data"]["attributes"]["title"]).to eq "My first book"
       end
     end
 
@@ -64,7 +66,7 @@ RSpec.describe 'Books', type: :request do
       end
 
       it 'returns the newly created resource' do
-        expect(json_body['data']['title']).to eq 'My first book'
+        expect(json_body['data']['attributes']['title']).to eq 'My first book'
       end
 
       it 'Increases a record in the database' do
@@ -102,7 +104,7 @@ RSpec.describe 'Books', type: :request do
       end
 
       it 'returns the updated resource' do
-        expect(json_body['data']['title']).to eq 'My updated book'
+        expect(json_body['data']['attributes']['title']).to eq 'My updated book'
       end
 
       it 'updates the record in the database' do

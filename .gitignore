@@ -33,3 +33,6 @@
 
 # Vim's temporary file
 *.swp
+
+# bybug history
+*.byebug_history

@@ -1,16 +1,18 @@
 class Api::V1::BooksController < Api::V1::SecureController
+  before_action :authenticate_user, only: [ :create, :update, :destroy ]
+
   def index
     books = Book.all
-    render serialize(books)
+    render jsonapi: books
   end
 
   def show
-    render serialize(book)
+    render jsonapi: book
   end
 
   def create
     if book.save
-      render serialize(book).merge(status: :created)
+      render jsonapi: book, status: :created
     else
       unprocessable_entity!(book)
     end
@@ -18,7 +20,7 @@ class Api::V1::BooksController < Api::V1::SecureController
 
   def update
     if book.update(book_params)
-      render serialize(book).merge(status: :ok)
+      render jsonapi: book, status: :ok
     else
       unprocessable_entity!(book)
     end

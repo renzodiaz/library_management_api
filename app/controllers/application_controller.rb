@@ -1,5 +1,19 @@
 class ApplicationController < ActionController::API
+  include Authentication
+
+rescue_from ActiveRecord::RecordNotFound, with: :resource_not_found
+
   protected
+
+  def builder_error(error)
+    render status: 400, json: {
+      error: {
+        type: error.class,
+        message: error.message,
+        invalid_params: error.invalid_params
+      }
+    }
+  end
 
   def unprocessable_entity!(resource)
     render status: :unprocessable_content, json: {
@@ -10,13 +24,7 @@ class ApplicationController < ActionController::API
     }
   end
 
-  def serialize(resource, options = {})
-    {
-      json: {
-        data: resource,
-        params: params,
-        options: options
-      }.to_json
-    }
+  def resource_not_found
+    render(status: 404)
   end
 end
