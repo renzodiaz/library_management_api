@@ -13,10 +13,19 @@ Rails.application.routes.draw do
           patch :update
         end
       end
+
       resources :users, except: :update do
         member do
           patch :update
         end
+      end
+
+      resources :borrowings, except: [ :update ] do
+        member do
+          patch :update
+        end
+
+        get :return_book
       end
 
       resources :user_confirmations, only: :show, param: :confirmation_token

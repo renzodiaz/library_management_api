@@ -1,16 +1,21 @@
 class Api::V1::BooksController < Api::V1::SecureController
-  before_action :authenticate_user, only: [ :create, :update, :destroy ]
+  before_action :authenticate_user, only: [ :index, :create, :update, :destroy ]
 
   def index
     books = Book.all
+    authorize books
+
     render jsonapi: books
   end
 
   def show
+    authorize book
     render jsonapi: book
   end
 
   def create
+    authorize book
+
     if book.save
       render jsonapi: book, status: :created
     else
@@ -19,6 +24,7 @@ class Api::V1::BooksController < Api::V1::SecureController
   end
 
   def update
+    authorize book
     if book.update(book_params)
       render jsonapi: book, status: :ok
     else
@@ -27,6 +33,7 @@ class Api::V1::BooksController < Api::V1::SecureController
   end
 
   def destroy
+    authorize book
     book.destroy
     render status: :no_content
   end

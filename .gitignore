@@ -36,3 +36,6 @@
 
 # bybug history
 *.byebug_history
+
+# Macs meta folder
+*.DS_Store

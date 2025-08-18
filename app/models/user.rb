@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_secure_password
   has_many :access_tokens
+  has_many :borrowings
+  has_many :borrowed, through: :borrowings, source: :book
 
   before_validation :generate_confirmation_token, on: :create
   before_validation :downcase_email

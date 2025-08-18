@@ -2,15 +2,21 @@ class Api::V1::UsersController < Api::V1::SecureController
   before_action :authenticate_user, only: [ :index, :show, :update, :destroy ]
 
   def index
+    authorize User
+
     users = User.all
     render jsonapi: users
   end
 
   def show
+    authorize user
+
     render jsonapi: user
   end
 
   def create
+    authorize user
+
     if user.save
       render jsonapi: user, status: :created, location: api_v1_user_url(user)
     else
@@ -19,6 +25,8 @@ class Api::V1::UsersController < Api::V1::SecureController
   end
 
   def update
+    authorize user
+
     if user.update(user_params)
       render jsonapi: user, status: :ok
     else
@@ -27,6 +35,8 @@ class Api::V1::UsersController < Api::V1::SecureController
   end
 
   def destroy
+    authorize user
+
     user.destroy
     render status: :no_content
   end
