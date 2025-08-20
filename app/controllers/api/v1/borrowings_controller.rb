@@ -2,12 +2,13 @@ class Api::V1::BorrowingsController < Api::V1::SecureController
   before_action :authenticate_user, only: [ :index, :show, :create, :return_book ]
 
   def index
-    authorize Borrowing
     borrowings = if current_user.librarian?
                    Borrowing.all
     else
                    current_user.borrowings
     end
+
+    authorize borrowings
 
     render jsonapi: borrowings
   end

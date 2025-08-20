@@ -1,6 +1,6 @@
 class BorrowingPolicy < ApplicationPolicy
   def index?
-    user.librarian? || record.user == user
+    user.librarian? || user.borrowings.any?
   end
 
   def show?
@@ -13,5 +13,15 @@ class BorrowingPolicy < ApplicationPolicy
 
   def return_book
     user.librarian?
+  end
+
+  class Scope < Scope
+    def resolve
+      if user.librarian?
+        scope.all
+      else
+        scope.where(user: user)
+      end
+    end
   end
 end

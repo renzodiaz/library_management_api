@@ -12,6 +12,14 @@ class Borrowing < ApplicationRecord
   scope :active, -> { where(returned_at: nil) }
   scope :overdue, -> { active.where("due_date < ?", Time.current) }
 
+  def librarian?
+    role == "librarian"
+  end
+
+  def member?
+    role == "member"
+  end
+
   private
 
   def set_borrowed_dates

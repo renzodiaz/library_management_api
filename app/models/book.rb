@@ -2,6 +2,10 @@ class Book < ApplicationRecord
   include PgSearch::Model
   multisearchable against: [ :title, :genre, :author_name ]
 
+  has_one_attached :cover do |attachable|
+    attachable.variant :thumb, resize_to_limit: [ 150, 150 ]
+  end
+
   belongs_to :author
   has_many :borrowings
 
@@ -13,7 +17,6 @@ class Book < ApplicationRecord
   def author_name
     author&.name
   end
-
 
   def is_available?
     borrowings.where(returned_at: nil).empty?
