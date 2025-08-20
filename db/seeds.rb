@@ -3,6 +3,15 @@ require 'faker'
 # Genrate API KEY
 ApiKey.create(app_name: "Vue")
 
+# Member user
+member = User.create(
+  first_name: "John",
+  last_name: "Doe",
+  email: "john@example.com",
+  password: "HelloWorld!!",
+  password_confirmation: "HelloWorld!!",
+)
+
 # Generate authors
 author1 = Author.create!(
   first_name: Faker::Artist.name,
