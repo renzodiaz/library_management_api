@@ -1,10 +1,18 @@
 class Book < ApplicationRecord
+  include PgSearch::Model
+  multisearchable against: [ :title, :genre, :author_name ]
+
   belongs_to :author
   has_many :borrowings
 
   validates :title, presence: true
   validates :genre, presence: true
   validates :isbn, presence: true, uniqueness: true
+
+
+  def author_name
+    author&.name
+  end
 
 
   def is_available?
