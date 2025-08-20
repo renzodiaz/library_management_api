@@ -8,10 +8,9 @@ class Api::V1::AccessTokensController < Api::V1::SecureController
     if user.authenticate(login_params[:password])
       AccessToken.find_by(user: user, api_key: api_key).try(:destroy)
 
-      access_token = AccessToken.create(user: user, api_key: api_key)
-      token = access_token.generate_token
+      access_token = AccessToken.create(user: user, api_key: api_key, accessed_at: Time.now)
 
-      render json: { data: access_token, token: token }, status: :created
+      render jsonapi: access_token, include: [ :user ], fields: { users: [ :first_name, :last_name, :role ] }, status: :created
     else
       render status: :unprocessable_entity,
         json: { error: { message: "Invalid credentials." } }
@@ -20,6 +19,7 @@ class Api::V1::AccessTokensController < Api::V1::SecureController
 
   def destroy
     authorize(access_token)
+
     access_token.destroy
     render status: :no_content
   end

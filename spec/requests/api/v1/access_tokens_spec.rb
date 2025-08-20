@@ -21,11 +21,11 @@ RSpec.describe 'Access Token', type: :request do
           end
 
           it 'receives an access token' do
-            expect(json_body['token']).to_not be nil
+            expect(json_body['data']['attributes']['token']).to_not be nil
           end
 
           it 'receives the user embedded' do
-            expect(json_body['data']['user_id']).to eq john.id
+            expect(json_body['data']['attributes']['user_id']).to eq john.id
           end
         end
 

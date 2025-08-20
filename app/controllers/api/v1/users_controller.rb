@@ -49,7 +49,6 @@ class Api::V1::UsersController < Api::V1::SecureController
   alias_method :resource, :user
 
   def user_params
-    params.require(:data).permit(:email, :password, :first_name, :last_name,
-                                 :role, :confirmation_redirect_url)
+    params.require(:data).permit(:full_name, :email, :password, :role, :confirmation_redirect_url)
   end
 end
