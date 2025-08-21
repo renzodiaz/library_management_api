@@ -1,6 +1,6 @@
 class BorrowingPolicy < ApplicationPolicy
   def index?
-    user.librarian? || user.borrowings.any?
+    user.librarian? || !record.empty?
   end
 
   def show?

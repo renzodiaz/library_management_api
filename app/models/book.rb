@@ -13,12 +13,11 @@ class Book < ApplicationRecord
   validates :genre, presence: true
   validates :isbn, presence: true, uniqueness: true
 
-
   def author_name
     author&.name
   end
 
-  def is_available?
-    borrowings.where(returned_at: nil).empty?
+  def is_available?(user_id)
+    borrowings.where(returned_at: nil, user_id: user_id).empty?
   end
 end

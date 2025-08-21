@@ -2,6 +2,7 @@ class ApplicationController < ActionController::API
   include Authentication
 
 rescue_from ActiveRecord::RecordNotFound, with: :resource_not_found
+rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   protected
 
@@ -20,6 +21,14 @@ rescue_from ActiveRecord::RecordNotFound, with: :resource_not_found
       error: {
         message: "Invalid parameters for resource #{resource.class}",
         invalid_params: resource.errors
+      }
+    }
+  end
+
+  def user_not_authorized
+    render status: :forbidden, json: {
+      error: {
+        message: "This user is not allowed to perform this action."
       }
     }
   end

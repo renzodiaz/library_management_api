@@ -2,13 +2,7 @@ class Api::V1::BorrowingsController < Api::V1::SecureController
   before_action :authenticate_user, only: [ :index, :show, :create, :return_book ]
 
   def index
-    borrowings = if current_user.librarian?
-                   Borrowing.all
-    else
-                   current_user.borrowings
-    end
-
-    authorize borrowings
+    borrowings = policy_scope(Borrowing)
 
     render jsonapi: borrowings
   end
@@ -24,7 +18,7 @@ class Api::V1::BorrowingsController < Api::V1::SecureController
 
     authorize borrowing
 
-    unless borrowing.book.is_available?
+    unless borrowing.book.is_available?(current_user.id)
       return render json: { errors: "Book is not available at the momment" }, status: :unprocessable_entity
     end
 
