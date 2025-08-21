@@ -4,7 +4,7 @@ class Api::V1::BorrowingsController < Api::V1::SecureController
   def index
     borrowings = policy_scope(Borrowing)
 
-    render jsonapi: borrowings
+    render jsonapi: borrowings, include: [ :book ]
   end
 
   def show
