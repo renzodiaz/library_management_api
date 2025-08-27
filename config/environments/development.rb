@@ -71,4 +71,5 @@ Rails.application.configure do
 
   # Allow RSpec requests with example.com
   config.hosts << "www.example.com"
+  Rails.application.routes.default_url_options[:host] = "http://localhost:3000"
 end

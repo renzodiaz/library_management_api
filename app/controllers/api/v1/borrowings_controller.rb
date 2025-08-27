@@ -2,7 +2,7 @@ class Api::V1::BorrowingsController < Api::V1::SecureController
   before_action :authenticate_user, only: [ :index, :show, :create, :return_book ]
 
   def index
-    borrowings = policy_scope(Borrowing)
+    borrowings = policy_scope(Borrowing.includes(:book, :user))
 
     render jsonapi: borrowings, include: [ :book ]
   end

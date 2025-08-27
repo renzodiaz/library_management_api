@@ -2,10 +2,10 @@ class Api::V1::BooksController < Api::V1::SecureController
   before_action :authenticate_user, only: [ :index, :create, :update, :destroy ]
 
   def index
-    books = Book.all
+    books = Book.with_attached_cover.includes(:author)
     authorize books
 
-    render jsonapi: books
+    render jsonapi: books, include: [ :author ]
   end
 
   def show
@@ -25,6 +25,7 @@ class Api::V1::BooksController < Api::V1::SecureController
 
   def update
     authorize book
+
     if book.update(book_params)
       render jsonapi: book, status: :ok
     else
@@ -45,6 +46,6 @@ class Api::V1::BooksController < Api::V1::SecureController
   end
 
   def book_params
-    params.require(:data).permit(:title, :genre, :isbn, :author_id)
+    params.require(:data).permit(:title, :genre, :isbn, :author_id, :cover)
   end
 end
